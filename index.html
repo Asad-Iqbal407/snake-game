@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #game-board {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            max-width: 500px;
+            max-height: 500px;
+        }
+        #game-board > div {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4">
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+            <div class="p-8">
+                <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold mb-1">Snake Game</div>
+                <div id="game-board" class="bg-gray-200 rounded-lg mb-4"></div>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-xl font-bold">Score: <span id="score">0</span></div>
+                    <div id="level" class="text-xl font-bold">Level: 1</div>
+                    <button id="start-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                        Start Game
+                    </button>
+                </div>
+                <div id="game-over" class="hidden text-center">
+                    <h2 class="text-2xl font-bold text-red-500 mb-2">Game Over</h2>
+                    <p class="mb-4">Your final score: <span id="final-score">0</span></p>
+                    <button id="restart-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        Restart Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
