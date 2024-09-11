@@ -10,9 +10,7 @@ let score = 0;
 let gameLoop;
 let level = 1;
 let gameSpeed = INITIAL_GAME_SPEED;
-let touchStartX = 0;
-let touchStartY = 0;
-let touchThreshold = 30; 
+
 
 // DOM elements
 const gameBoard = document.getElementById('game-board');
@@ -218,39 +216,54 @@ document.addEventListener('keydown', e => {
     }
 });
 
-gameBoard.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-});
+let touchStartX = 0;
+let touchStartY = 0;
+const MIN_SWIPE_DISTANCE = 30; // Minimum swipe distance in pixels
 
-gameBoard.addEventListener('touchmove', e => {
-    e.preventDefault(); // Prevent scrolling while swiping
-});
+function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}
 
-gameBoard.addEventListener('touchend', e => {
-    const touchEndX = e.changedTouches[0].screenX;
-    const touchEndY = e.changedTouches[0].screenY;
-    const dx = touchEndX - touchStartX;
-    const dy = touchEndY - touchStartY;
+function handleTouchMove(e) {
+    if (!touchStartX || !touchStartY) {
+        return;
+    }
 
-    if (Math.abs(dx) > touchThreshold || Math.abs(dy) > touchThreshold) {
+    let touchEndX = e.touches[0].clientX;
+    let touchEndY = e.touches[0].clientY;
+
+    let dx = touchEndX - touchStartX;
+    let dy = touchEndY - touchStartY;
+
+    if (Math.abs(dx) > MIN_SWIPE_DISTANCE || Math.abs(dy) > MIN_SWIPE_DISTANCE) {
         if (Math.abs(dx) > Math.abs(dy)) {
             // Horizontal swipe
-            if (dx > 0 && direction !== 'left') {
-                direction = 'right';
-            } else if (dx < 0 && direction !== 'right') {
-                direction = 'left';
-            }
+            direction = dx > 0 && direction !== 'left' ? 'right' : 
+                        dx < 0 && direction !== 'right' ? 'left' : 
+                        direction;
         } else {
             // Vertical swipe
-            if (dy > 0 && direction !== 'up') {
-                direction = 'down';
-            } else if (dy < 0 && direction !== 'down') {
-                direction = 'up';
-            }
+            direction = dy > 0 && direction !== 'up' ? 'down' : 
+                        dy < 0 && direction !== 'down' ? 'up' : 
+                        direction;
         }
+
+        touchStartX = 0;
+        touchStartY = 0;
     }
-});
+}
+
+function handleTouchEnd() {
+    touchStartX = 0;
+    touchStartY = 0;
+}
+
+// Add touch event listeners
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+document.addEventListener('touchend', handleTouchEnd, false);
+
 
 // Initialize game board
 gameBoard.style.display = 'grid';
